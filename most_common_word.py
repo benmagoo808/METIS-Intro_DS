@@ -39,10 +39,12 @@ def get_most_common(word_list):
             most_common = val
         elif count == freq:
             most_common = str(val + ', ' + most_common)
-    # Print and r
-    print('The word(s) which appear the most are: ')
-    print(most_common.title())
-    print('Appearing ' + str(freq) + ' times')
+    return most_common, freq
 
 
-get_most_common(get_clean_word_list())
+word_list = get_clean_word_list()
+most_common, freq = get_most_common(word_list)
+# Print output
+print('The word(s) which appear the most are: ')
+print(most_common.title())
+print('Appearing ' + str(freq) + ' times')

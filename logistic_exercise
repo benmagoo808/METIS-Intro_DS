@@ -1,9 +1,4 @@
-"""Exercise Time!!
-  * Generate the logistic regression model incorporating all of the features we have available to predict `outcome_number` and get the accuracy when training and testing on all data. How much better is this than the case where we trained our model using only `pelvic_incidence`?
-  * Use train/test split with 70% training, 30% testing and get the test error of the model trained on all features using `train_test_split` like we did during linear regression 
-  * Inspect all of the model coefficients of the model trained on all features. Which feature is the most important for the prediction? Which is the least important?
-  * What are some problems you can see in using the data like we have been? (Look at the fraction of positive and negative outcomes in the dataset)
-"""
+
 allLogReg = LogisticRegression()
 allCols = ["pelvic_incidence","pelvic_tilt","lumbar_lordosis_angle","sacral_slope","pelvic_radius","spondy_grade"]
 allX = vertebral_data[allCols] # use all columns but outcome as x

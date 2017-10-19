@@ -1,0 +1,47 @@
+"""Exercise Time!!
+  * Generate the logistic regression model incorporating all of the features we have available to predict `outcome_number` and get the accuracy when training and testing on all data. How much better is this than the case where we trained our model using only `pelvic_incidence`?
+  * Use train/test split with 70% training, 30% testing and get the test error of the model trained on all features using `train_test_split` like we did during linear regression 
+  * Inspect all of the model coefficients of the model trained on all features. Which feature is the most important for the prediction? Which is the least important?
+  * What are some problems you can see in using the data like we have been? (Look at the fraction of positive and negative outcomes in the dataset)
+"""
+allLogReg = LogisticRegression()
+allCols = ["pelvic_incidence","pelvic_tilt","lumbar_lordosis_angle","sacral_slope","pelvic_radius","spondy_grade"]
+allX = vertebral_data[allCols] # use all columns but outcome as x
+y = vertebral_data.outcome_number # specify the outcome column
+allLogReg.fit(allX, y) # fit the data
+allPredLog = allLogReg.predict(allX) # create predictions
+print allPredLog
+print 'Model accuracy', metrics.accuracy_score(y,allPredLog)
+
+allXTrain, allXTest, yTrain, yTest = train_test_split(allX, y, test_size=0.3, random_state=1) # Create 70/30 train/test
+print allXTrain.shape # Check our work
+print allXTest.shape
+print yTrain.shape
+print yTest.shape
+
+allTrainLogReg = LogisticRegression() # Create new logistic regression variable
+allTrainLogReg.fit(allXTrain, yTrain) # Train on the training set
+TrainPredLog = allTrainLogReg.predict(allXTrain) # Make predicitons for the training set
+TestPredLog = allTrainLogReg.predict(allXTest) # Make predictions for the testing set, using the fit from the training
+print "Training Set: "
+print "Mean Absolute Error", metrics.mean_absolute_error(yTrain, TrainPredLog)
+print "Mean Squared Error", metrics.mean_squared_error(yTrain, TrainPredLog)
+print "Root Mean Squared Error", np.sqrt(metrics.mean_squared_error(yTrain, TrainPredLog))
+print "\nTesting Set: "
+print "Mean Absolute Error", metrics.mean_absolute_error(yTest, TestPredLog)
+print "Mean Squared Error", metrics.mean_squared_error(yTest, TestPredLog)
+print "Root Mean Squared Error", np.sqrt(metrics.mean_squared_error(yTest, TestPredLog))
+print "\nThose are the loss functions, the reward functions would be:"
+print 'Training set model accuracy', metrics.accuracy_score(yTrain,TrainPredLog)
+print 'Testing set model accuracy', metrics.accuracy_score(yTest,TestPredLog)
+
+
+print zip(allCols, allLogReg.coef_[0])
+print "This tells us that the highest positive coefficient is Spondy_Grade, \nwhich means it has the highest effect on the log odds and hence, the probability"
+print "\nSacral_Slope has the highest negative coefficient and thus has the least effect on log odds"
+
+coefList = allLogReg.coef_[0]
+positiveCoef = float(sum(x > 0 for x in coefList))
+CoefRatio = float(positiveCoef / len(coefList))
+print "The ratio of positive to negative coefficients is", CoefRatio
+print "Which means we could use some better feature selection in our model, or possibly some feature engineering"
